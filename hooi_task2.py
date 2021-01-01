@@ -99,43 +99,6 @@ def hosvd(X, r):
 	return [Y.reshape((3,3,3,3,3,3,3,3,3)), rate]
 
 
-#もとの評価関数を(27, 27, 27)のテンソルとしてHOSVD
-def hosvd(X, r):  
-    X = X.reshape(27, 27, 27)
-    #右
-    XR = X.reshape(729, 27) 
-    _, _, v = linalg.svd(XR)                                              
-    VRt = v[:r, :]                                    #vダガー
-    VR = np.transpose(VRt)                             #v
-    #真ん中
-    XM = X.transpose(0, 2, 1)
-    XM = XM.reshape(729, 27)
-    _, _, v = linalg.svd(XM)                                              
-    VMt = v[:r, :]                                    #vダガー
-    VM = np.transpose(VMt)                             #v
-    #左
-    XL = X.transpose(2, 1, 0)
-    XL = XL.reshape(729, 27)
-    _, _, v = linalg.svd(XL)                                              
-    VLt = v[:r, :]                                    #vダガー
-    VL = np.transpose(VLt)                             #v
-    #コアテンソル
-    C2 = np.tensordot(X, VR, (2,0))             
-    C1 = np.tensordot(C2, VM, (1,0)) 
-    C1 = C1.transpose(0, 2, 1)                      #tensordotの計算によるテンソルの順番を調整
-    C = np.tensordot(C1, VL, (0,0))  
-    C = C.transpose(2, 0, 1)         
-    #復元
-    Y2 = np.tensordot(C, VRt, (2,0))  
-    Y1 = np.tensordot(Y2, VMt, (1,0))
-    Y1 = Y1.transpose(0, 2, 1)
-    Y = np.tensordot(Y1, VLt, (0,0))
-    Y = Y.transpose(2, 0, 1)  
-    #圧縮率
-    rate = (VRt.size + VMt.size + VLt.size + C.size) / X.size
-    return [Y.reshape((3,3,3,3,3,3,3,3,3)), rate]
-
-
 #HOSVD vs HOOI(同じ圧縮率で対戦)
 def cmpr(rate, num_hosvd, num_hooi):  #圧縮率、hosvd特異値数、hooi特異値数
 	y1 = main.battle(hooi(get_np, num_hooi)[0], hosvd(get_np, num_hosvd)[0])[0]  #hooiの勝率
