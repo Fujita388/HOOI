@@ -19,42 +19,42 @@ def hooi(X, r):
 	R = ortho_group.rvs(27)[:r, :]
 	for i in range(20):
 		LX = np.tensordot(X, L.transpose(), (0,0)).transpose(2,0,1)
-#		print(LX.shape) 
+		#print(LX.shape) 
 		MX = np.tensordot(LX, M.transpose(), (1,0)).transpose(0,2,1)
-#		print(MX.shape)
+		#print(MX.shape)
 		MX = MX.reshape(r**2, 27)
 		U, s, V = linalg.svd(MX)
 		R = V[:r, :]
 
 		RX = np.tensordot(X, R.transpose(), (2,0))
-#		print(RX.shape)
+		#print(RX.shape)
 		LX = np.tensordot(RX, L.transpose(), (0,0)).transpose(1,2,0)
-#		print(LX.shape)
+		#print(LX.shape)
 		LX = LX.reshape(r**2, 27)
 		U, s, V = linalg.svd(LX)
 		M = V[:r, :]
 
 		MX = np.tensordot(X, M.transpose(), (1,0)).transpose(0,2,1)
-#		print(MX.shape)
+		#print(MX.shape)
 		RX = np.tensordot(MX, R.transpose(), (2,0)).transpose(1,2,0)
-#		print(RX.shape)
+		#print(RX.shape)
 		RX = RX.reshape(r**2, 27)
 		U, s, V = linalg.svd(RX)
 		L = V[:r, :]
 	#コアテンソル
 	C2 = np.tensordot(X, L.transpose(), (0,0)).transpose(2,0,1)
-#	print(C2.shape)
+	#print(C2.shape)
 	C1 = np.tensordot(C2, M.transpose(), (1,0)).transpose(0,2,1)
-#	print(C1.shape)
+	#print(C1.shape)
 	C = np.tensordot(C1, R.transpose(), (2,0))
-#	print(C.shape)
+	#print(C.shape)
 	#復元
 	Y2 = np.tensordot(C, L, (0,0)).transpose(2,0,1)
-#	print(Y2.shape)
+	#print(Y2.shape)
 	Y1 = np.tensordot(Y2, M, (1,0)).transpose(0,2,1)
-#	print(Y1.shape)
+	#print(Y1.shape)
 	Y = np.tensordot(Y1, R, (2,0))
-#	print(Y.shape)
+	#print(Y.shape)
 	#圧縮率
 	rate = (L.size + M.size + R.size + C.size) / X.size
 	#フロべニウスノルムの相対誤差
