@@ -1,3 +1,6 @@
 # Using HOOI(Higher Order Orthogonal Iteration of tensors) for data-approximation of Tic-Tac-Toe AI
 
-## Summary
+## task1
+　　1. 三目並べのテンソル(27, 27, 27)をHOOIを用いて近似
+  
+　　2. 圧縮率とフロべニウスノルムの相対誤差を計算
