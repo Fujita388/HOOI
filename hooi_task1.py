@@ -18,7 +18,7 @@ def hooi(X, r):
 	M = ortho_group.rvs(27)[:r, :]
 	R = ortho_group.rvs(27)[:r, :]
 	for i in range(20):
-		LX = np.tensordot(X, L.transpose(), (0,0)).transpose(2,0,1)
+		LX = np.tensordot(X, L.transpose(), (0,0)).transpose(2,0,1) #transposeで計算順序入れ替えを調整
 		#print(LX.shape) 
 		MX = np.tensordot(LX, M.transpose(), (1,0)).transpose(0,2,1)
 		#print(MX.shape)
@@ -66,7 +66,7 @@ def hooi(X, r):
 
 
 
-#print(hooi(get_np, 5))
+#print(hooi(get_np, 0))
 
 
 
